@@ -1,12 +1,12 @@
 #this 用法全面解析（一）
 
     在学习js的过程中，不少朋友会对this感到困惑，今天就来总结一下this的用法。
-    顾名思义，this--这，this很容易被误解为调用this函数或者是方法。然
-而，this实际指的调用this的context（上下文对象）
+    顾名思义，this--这，this很容易被误解为调用this函数或者是方法。然而，this实指的调用this的context（上下文对象）
 
     1. 在一般的函数中调用this
 
     我写了一段在函数中调用this的代码，在node.js v7.1.0中执行，代码如下：
+
 ```
 
     function A(){
@@ -17,7 +17,9 @@
 
 返回的结果当然是gloabal；
 
+
 ```
+
   { global: [Circular],
   process: 
    process {
@@ -31,7 +33,10 @@
     2. 在对象中调用this
 
     当我们在对象中调用this，this一般指向这个对象。我们来测试一下，代码如下：
+
+
 ```
+
 let o = {
   showThis : function(){
     console.log("I'm o: "+this);
@@ -40,10 +45,12 @@ let o = {
 o.showThis();
 
 ```
+
 在node里面执行一下，得到结果:
 I am o: [object Object]现在this指向的是一个o这个对象。这样看可能会疑惑，在浏览器里执行就很清楚了。但是没关系，我们在来写一段代码确认一下,代码如下：
 
 ```
+
 let o = {
   a:'a',
   getA:function(){
