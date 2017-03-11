@@ -70,7 +70,7 @@ var o = {
 所以说，当一个调用this的函数,作为参数传入时，这个this对象指向的是global。
 
 总结：
-3.在new 方法中的this，会将this 指向刚刚生成对象。
-4.将一个调用this的函数，作为参数传入时，这个this对象指向的时global。
+3. 在new 方法中的this，会将this 指向刚刚生成对象。
+4. 将一个调用this的函数，作为参数传入时，这个this对象指向的时global。
 
 
