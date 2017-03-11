@@ -55,8 +55,7 @@ console.log(xiaoming.legs);//输出4
 
 看下面的代码：
 
-``
-
+```
 function Man(){
   this.sex = 'male';
 }
@@ -68,12 +67,11 @@ for(var key in xiaoming){
   console.log(key);
 }
 //输出sex 和 legs
-``
+```
 
 * Object.keys()方法，一个包含对象可枚举属性的数组
 
 ```
-
 继续用上面的例子：
 var xiaoming = {};
 Object.defineProperties(xiaoming,{
