@@ -14,3 +14,14 @@
 
 ##Object 与 原型链(prototype)
 
+1. [Object 与 原型链（一）](./object-prototype-first.md)
+2. [Object 与 原型链（二）](./object-prototype-second.md)
+3. [Object 与 原型链（三）](./object-prototype-third.md)
+4. [Object 与 原型链（四）](./object-prototype-forth.md)
+
+##Promise -- async -- await
+
+1. [Promise--async--await（一）](./async-1.md)
+1. [Promise--async--await（二）](./async-2.md)
+
+
