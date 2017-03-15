@@ -150,5 +150,5 @@ console.log(a);//输出1，这里进行了取余操作
 
 * typeof
 
-typeof 操作符返回一个字符串，指示操作数的类型。在es6以前只会返回以下这几结果：'string'、'number'、'undefined'、'boolean'、'object'、'function'。
+typeof 操作符返回一个字符串，指示操作数的类型。在es6以前只会返回以下这几个结果：'string'、'number'、'undefined'、'boolean'、'object'、'function'。
 
