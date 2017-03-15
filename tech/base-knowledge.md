@@ -152,3 +152,164 @@ console.log(a);//输出1，这里进行了取余操作
 
 typeof 操作符返回一个字符串，指示操作数的类型。在es6以前只会返回以下这几个结果：'string'、'number'、'undefined'、'boolean'、'object'、'function'。
 
+```
+var testString = 'abc';
+console.log(typeof testString);//输出'String'
+
+var testNumber = 1;
+console.log(typeof testNumber);//输出'number'
+
+var testUndefined;
+console.log(typeof testUndefined);//输出'undefined'
+
+var testBoolean = true;
+console.log(typeof testBoolean);//输出'boolean'
+
+var testObjcet = {};
+console.log(typeof testObject);//输出'object'
+
+var testFunction = function(){};
+console.log(typeof testFunction);//输出'function'
+
+* delete 操作符
+testNumber = {a:1};
+console.log(testNumber.a);//输出1
+delete testNumber.a;
+console.log(testNumber.a);//输出undefined
+
+* 逻辑运算符
+
+在js中，逻辑运算符有&&、||、!
+
+* &&操作
+
+```
+
+//&&操作符代表的是且操作
+t = true;
+f = false;
+//&&操作遵循以下规则
+t&&f; // 输出false
+f&&t; // 输出false
+t&&t; // 输出true
+f&&f; // 输出false
+
+```
+
+* ||操作符
+
+```
+// ||操作符代表的是或操作
+t = true;
+f = false;
+// ||操作符遵循以下规则
+t||f; //输出t
+f||f; //输出f
+f||t; //输出t
+t||t; //输出t
+
+```
+
+* !操作符
+
+```
+// !操作符代表的是取反
+var t = true;
+var f = false;
+
+!t;//输出false;
+!f;//输出true;
+
+```
+
+* 比较运算符
+
+js中的比较运算符有'=='、'==='、'!='、'!=='、'>='、'<='
+
+```
+//比较两个变量是否相等，不比较对象的类型
+var a = 1;
+var b = '1';
+console.log(a == b);//输出true
+
+//比较两个变量是否相等，同时比较对象的类型
+console.log(a === b);//输出false
+
+//比较两个对象是否不相等，不比较对象的类型
+console.log(a != b);//输出false
+
+//比较两个对象是否不相等，同时比较对象的类型
+console.log(a !== b);//输出true
+
+//比较变量之前的大小
+//在js中，如果变量是字符串,会先将字符串转换成相应的ascii码再进行比较
+var a = 'a';
+var b = 'b';
+console.log(a < b);//输出true
+
+3. js中的语句
+
+* switch 语句
+
+```
+
+//switch语句中一般要有switch、case(用于选择情况)、break(用于暂停函数)、default语句(用于匹配其他情况)
+		function testSwitch(a){
+				switch(a){
+					case 1:
+						console.log(1);
+						break;
+					case 2:
+						console.log(2);
+						break;
+					default:
+						console.log('u enter others value');
+						break;
+				}
+			}
+		testSwitch(2);//输出2
+```
+
+* do...while语句
+
+```
+
+//do..while语句语法结构如下
+var i = 1;
+do {
+	i++;
+	console.log(i);
+}while(i < 5);
+
+//控制台依次输出2、3、4、5
+```
+
+* while语句
+
+```
+
+// while语句语法如下
+var i = 1;
+while(i < 5){
+	console.log(i);
+	i++;
+}
+//依次输出1、2、3、4
+
+```
+
+* if..else 语句
+
+```
+
+var a = 1;
+if(a === 1){
+	console.log(1);
+}
+else if(a === 2){
+	console.log(2);
+}
+else{
+	console.log('other value');
+}
+```
