@@ -24,4 +24,6 @@
 1. [Promise--async--await（一）](./async-1.md)
 1. [Promise--async--await（二）](./async-2.md)
 
+## js基础知识
 
+1. [js基础知识](./base-knowledge.md)
