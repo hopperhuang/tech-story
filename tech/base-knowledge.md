@@ -170,12 +170,17 @@ console.log(typeof testObject);//输出'object'
 
 var testFunction = function(){};
 console.log(typeof testFunction);//输出'function'
+```
 
 * delete 操作符
+
+```
+
 testNumber = {a:1};
 console.log(testNumber.a);//输出1
 delete testNumber.a;
 console.log(testNumber.a);//输出undefined
+```
 
 * 逻辑运算符
 
@@ -246,7 +251,7 @@ console.log(a !== b);//输出true
 var a = 'a';
 var b = 'b';
 console.log(a < b);//输出true
-
+```
 3. js中的语句
 
 * switch 语句
