@@ -1,4 +1,4 @@
-#Promise -- async--await异步流程控制（二）
+# Promise -- async--await异步流程控制（二）
 
 在上一章，我们讲述了js中处理异步流程的一些方法，并介绍了async--await的一些好处，在接下来的第二章中，我将讲述一下，async--await的使用情景、在利用express框架搭建本博客的过程中，async--await的实际利用，还有就是在对async--await用法的一些思考。
 
