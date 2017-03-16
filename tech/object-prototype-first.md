@@ -1,4 +1,4 @@
-#object 与原型链（一）
+# object 与原型链（一）
 
 今天我们来谈谈object吧。
 
