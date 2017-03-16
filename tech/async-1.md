@@ -1,4 +1,4 @@
-#Promise -- async--await异步流程控制（一）
+# Promise -- async--await异步流程控制（一）
 
 在服务端程序中，经常涉及到读写I/O操作，这时就需要对异步流程作控制。在讲述Promise -- async -- await怎么作异步流程控制前，我们首先需要知道什么是异步。我们下面就先来简单说一下。
 
