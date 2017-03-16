@@ -27,3 +27,4 @@
 ## js基础知识
 
 1. [js基础知识](./base-knowledge.md)
+2. [js中的函数](./function.md)
