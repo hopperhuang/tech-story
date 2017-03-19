@@ -28,4 +28,5 @@
 
 1. [js基础知识](./base-knowledge.md)
 2. [js中的函数](./function.md)
-3. [对象基础只是](./object_base.md)
+3. [对象基础知识](./object_base.md)
+4. [对象与原型链](./objectprototype.md)
