@@ -5,4 +5,4 @@
 1. [对象与原型链1](./object-prototype-first.md)
 2. [对象与原型链2](./object-prototype-second.md)
 3. [对象与原型链3](./object-prototype-third.md)
-4. [对象与原型链4](./object-prototype-four.md)
+4. [对象与原型链4](./object-prototype-forth.md)
