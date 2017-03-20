@@ -31,3 +31,4 @@
 3. [对象基础知识](./object_base.md)
 4. [对象与原型链](./objectprototype.md)
 5. [超类继承与复制](./extendAndCopy.md)
+6. [初探dom](./domBase.md)
