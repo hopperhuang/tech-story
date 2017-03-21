@@ -75,3 +75,60 @@ myapp.event.addEvent = function(element,action,callback){
 	}
 };
 ```
+
+4. 配置对象
+
+在编写函数的过程中，我们可以配置默认对象，这样就不用每次都传入参数
+
+```
+//定义个bikemaker，配置好参数
+function BikeMaker(color,speed){
+	this.color = color || 'red';
+	this.speed = speed || 20;
+}
+
+//生成默认的bike 
+var redBike = new BikeMaker();
+console.log(redBike.color);//'red'
+
+//生成我们想要的bike
+var bikeUWant = new BikeMaker('black',30);
+console.log(bikeUWant.color);//'black'
+console.log(bikeUWant.speed);///30
+```
+
+5. 私有属性
+
+在js中也有私有属性，我们可以把私有属性放在一个函数里面，这样外面的函数就无法访问这个私有属性
+```
+
+function(){
+	var number = 1;
+	function addOne(number){
+		number + 1;
+	}
+}
+console.log(number); //error
+console.log(addOne);// error
+```
+可以看到nuber和addOne在函数外面是无法访问的。
+
+6. 特权方法
+
+想要访问私有变量也不是没有办法的，我们可以通过特权方法去访问。特权方法只允许我们从外部访问变量，并不允许我们从外部去改变私有变量。
+
+```
+function Privilege(){
+ var number = 1;
+ return {
+ 	getNumber:function(){
+ 		return number;
+ 	}
+ };
+}
+Privilege().getNumber;//1
+```
+
+7. 私有方法和变量公有化
+
+如果想要在外部访问私有变量和私有方法也不是不能的，我们可以将
