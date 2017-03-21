@@ -165,7 +165,7 @@ function(e){
 	e.preventDefault();
 }
 //通过preventDefault方法，我们阻止了默认事件的发生
-
+```
 * Ajax事件
 
 具体关于ajax的解释可以看[这里](https://developer.mozilla.org/zh-CN/docs/AJAX)
