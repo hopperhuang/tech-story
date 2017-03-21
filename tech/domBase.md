@@ -166,3 +166,41 @@ function(e){
 }
 //通过preventDefault方法，我们阻止了默认事件的发生
 
+* Ajax事件
+
+具体关于ajax的解释可以看[这里](https://developer.mozilla.org/zh-CN/docs/AJAX)
+利用ajax打开一个连接通常有四个步骤，首先要生成一个xhr对象，然后添加xhr对象onreadStateChange事件的监听函数，然后利用打开请求，然后发送请求。
+具体代码如下：
+
+```
+var xhr = new XMLHttpRequest();//生成一个xhr对象
+xhr.onreadyStateChage = function(event){};//监听onreadyStateChange事件，添加事件的回调函数用于处理数据
+xhr.open('GET','http://abc.com',true);//打开一个请求
+//open方法接受三个参数,第一个参数确定发送请求的方式，第二各参数确定接受请求的url，第三个参数是一个布尔值，确定请求是否异步发送
+xhr.send('');//发送请求  send方法附带发送请求的内容，一般来说post方法会带上请求内容,get方法不带上内容
+```
+
+下面来封装一下发送ajax请求的过程:
+
+```
+
+function Request(method,url,callback,async,param){
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = (function(myxhr){
+		return function(){
+			callback(myxhr);
+		}
+	})(xhr);
+	xhr.open(method,url,async);
+	xhr.send(param);
+}
+//下面向Cnode发送一个get请求
+Request('GET','https://cnodejs.org/api/v1/topics',function(xhr){
+	if(xhr.status == 200 && xhr.readyState == 4){
+		console.log(xhr.responseText);
+	}
+},true,'');
+//成功发送请求后，可以看到控制台返回的数据
+```
+
+上面的例子就简单地谢了一下发送ajax请求的方法，在开发过程中，我们更多地要考虑xhr对象的浏览器兼容性问题。
