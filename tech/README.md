@@ -32,3 +32,4 @@
 4. [对象与原型链](./objectprototype.md)
 5. [超类继承与复制](./extendAndCopy.md)
 6. [初探dom](./domBase.md)
+7. [编程模式](./program-pattern.md)
