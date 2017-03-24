@@ -33,3 +33,7 @@
 5. [超类继承与复制](./extendAndCopy.md)
 6. [初探dom](./domBase.md)
 7. [编程模式](./program-pattern.md)
+
+## 设计模式
+1. [设计模式的原则]
+2. [单例模式](./singleton.md)
