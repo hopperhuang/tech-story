@@ -131,4 +131,62 @@ Privilege().getNumber;//1
 
 7. 私有方法和变量公有化
 
-如果想要在外部访问私有变量和私有方法也不是不能的，我们可以将
+如果想要在外部访问私有变量和私有方法也不是不能的，我们可以将开放一个借口，用于改变私有变量
+
+```
+			var Object = (function() {
+				var a = 1;
+				return {
+					get: function() {
+						return a;
+					},
+					set: function(number) {
+						return a = number;
+					}
+				};
+			})();
+			console.log(Object.get()); //控制台输出1；
+			Object.set(2);
+			console.log(Object.get()); //控制台输出2;
+```
+
+8. 自执行函数
+
+函数除了可以先定义后执行，还可以定义的同时直接调用
+
+```
+(function(){
+	var a = 1;
+	console.log(a);
+})();
+//这样我们就定义了一个自执行函数
+console.log(a);//输出undefined，自执行函数里面的变量无法再全局作用域直接调用
+```
+9. 链式调用
+
+链式调用的关键在于，函数方法执行完毕后将返回自身
+
+```
+			var dom = {};
+			dom.getElement = function(id) {
+				this.elem = document.getElementById(id);
+				return this; //返回自身以备后面的调用。
+			}
+			dom.setAttribute = function(attr, value) {
+				this.elem.setAttribute(attr,value);
+				return this;
+			};
+			dom.setStyle = function(style, value) {
+				this.elem.style[style] = value;
+				return this;
+			}
+			var para = document.createElement('p');
+			para.setAttribute('id', 'para');
+			document.body.appendChild(para);
+			console.log(document.getElementById('para'))
+			dom.getElement('para').setAttribute('id', 'paragraph').setStyle('color', 'red');
+			console.log(para.id); // 控制台输出para
+			console.log(para.style.color);//控制台输出'red'
+```
+
+
