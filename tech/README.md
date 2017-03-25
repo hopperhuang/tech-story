@@ -39,3 +39,4 @@
 2. [单例模式](./singleton.md)
 3. [工厂模式](./factory.md)
 4. [装饰者模式](./decorator.md)
+5. [观察/订阅模式](./observe-subscribe.md)
