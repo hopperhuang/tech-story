@@ -1,4 +1,4 @@
-#超类继承与复制
+# 超类继承与复制
 
 ## 超类继承
 
@@ -114,7 +114,7 @@ console.log(xiaoming.skills == student.skills);\
 
 ```
 
-深度复制
+## 深度复制
 
 ```
 
