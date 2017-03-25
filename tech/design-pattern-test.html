@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Design pattern test</title>
+		<link href='../../../../dep/test/mocha.css' rel="stylesheet" />
+		<style type="text/css"></style>
+	</head>
+
+	<body>
+		<div id='mocha'></div>
+		<script src='../../../../dep/module/requirejs-2.3.2.js'></script>
+		<!-- 引入require.js模块 -->
+		<script>
+			var testPath = '../../../../'; //为require-cofiguration.js定义 BaseUrl
+		</script>
+		<script src='../../../require-configuration.js'></script>
+		<!-- 引入configuraion.js，定义好模块之间的引用,加载模块  -->
+		<script>
+			requirejs(['chai'], function(chai) {
+				mocha.setup('bdd'); //将mocha初始化到html
+				//定义断言风格
+				var assert = chai.assert;
+				var expect = chai.expect;
+				//本次要测试的对象
+
+				describe('singleton test', function() {
+					it('first test', function() {
+						var Logger = (function() {
+							var singleInstance;
+							return {
+								getLogger: function() {
+									if(!singleInstance) {
+										return singleInstance = {};
+									} else {
+										return singleInstance;
+									}
+								}
+							};
+						})();
+						var redLogger = Logger.getLogger();
+						var blueLogger = Logger.getLogger();
+						expect(redLogger).to.be.equal(blueLogger);
+					});
+					it('second test', function() {
+						var Logger = (function() {
+							var singleInstance;
+							return function() {
+								if(!singleInstance) {
+									return singleInstance = this;
+								} else {
+									return singleInstance;
+								}
+							};
+						})();
+						var redLogger = new Logger();
+						var blueLogger = new Logger();
+						expect(redLogger).to.be.equal(blueLogger);
+					});
+				});
+				describe('test factory pattern', function() {
+					it('test VehicleFactory', function() {
+						function VehicleFactory(type, color) {
+							var Factory = {};
+							Factory.Bike = function() {
+								this.value = '200rmb';
+								this.color = color || 'red';
+								this.speed = '20kph';
+							};
+							Factory.MotorBike = function() {
+								this.value = '2000rmb';
+								this.color = color || 'blue';
+								this.speed = '60kph';
+							};
+							Factory.Car = function() {
+								this.value = '150000rmb';
+								this.color = color || 'black';
+								this.speed = '100kph';
+							}
+							if(type !== 'Bike' && type !== 'MotorBike' && type !== 'Car') {
+								throw Error('U want to make a plane? Okay, make it by yourself!!');
+							}
+							return new Factory[type];
+						}
+						var greenBike = new VehicleFactory('Bike', 'green');
+						expect(greenBike.color).to.be.equal('green');
+					});
+					it('another VehicleFactory', function() {
+						VehicleFactory = (function() {
+							var factory = {};
+							factory.bike = function() { this.name = 'bike'; };
+							factory.car = function() { this.name = 'car'; };
+							factory.motorbike = function() { this.name = 'motorbike' };
+							_vehicle = function(type) {
+								return new factory[type];
+							};
+							_vehicle.addProto = function(type, construcFunction) {
+								factory[type] = construcFunction;
+							};
+							return _vehicle;
+						})();
+						var bike = VehicleFactory('bike');
+						VehicleFactory.addProto('plane', function() {
+							this.name = 'plane';
+						});
+						var plane = VehicleFactory('plane');
+						expect(bike.name).to.be.equal('bike');
+						expect(plane.name).to.be.equal('plane');
+					});
+				});
+				describe('decoration pattern', function() {
+					it('lets decorate trees', function() {
+						var tree = {};
+						tree.decorate = function() {
+							return 'U get a tree. ';
+						};
+						tree.putRedBalls = function() {
+							var oldTree = this.decorate();
+							this.decorate = function() {
+								return oldTree + 'Put red balls on. '
+							}
+						};
+						tree.putBlueBalls = function() {
+							var oldTree = this.decorate();
+							this.decorate = function() {
+								return oldTree + 'Put blue balls on. '
+							}
+						};
+						tree.putRedBalls();
+						tree.putBlueBalls();
+						expect(tree.decorate()).to.be.equal('U get a tree. Put red balls on. Put blue balls on. ');
+					});
+				});
+				describe('observer pattern', function() {
+					observer = {
+						addSubscribes: function(callback) {
+							this.subscribes[this.subscribes.length] = callback;
+						},
+						removeSubscribes: function(callback) {
+							for(var index in this.subscribes) {
+								if(this.subscribes[index] === callback) {
+									delete this.subscribes[index];
+								}
+							}
+						},
+						publish: function(content) {
+							for(var index in this.subscribes) {
+								if(typeof this.subscribes[index] === 'function') {
+									this.subscribes[index](content);
+								}
+							}
+						},
+						makePublisher: function(publisher) {
+							for(var key in this) {
+								publisher[key] = this[key];
+							}
+							publisher.subscribes = [];
+						}
+					}
+					var blogger = {
+						writeBlog: function() {
+							var content = 'Today is National Day!';
+							this.publish(content);
+						}
+					};
+					var letsSeeWhatJackRead;
+					var jack = {
+						read: function(content) {
+							letsSeeWhatJackRead = "I've read the news: " + content;
+						}
+					};
+					observer.makePublisher(blogger);
+					blogger.addSubscribes(jack.read);
+					it('publish test', function() {
+						blogger.writeBlog();
+						expect(letsSeeWhatJackRead).to.be.equal("I've read the news: Today is National Day!");
+					});
+					it('remove test', function() {
+						blogger.removeSubscribes(jack.read);
+						letsSeeWhatJackRead = '';
+						blogger.writeBlog();
+						expect(letsSeeWhatJackRead).to.be.equal('');
+					});
+				});
+				describe('this test', function() {
+					function getThis() {
+						return this;
+					}
+					it('call in window', function() {
+						expect(getThis()).to.be.equal(window);
+					});
+					it('call in object', function() {
+						var testObject = {};
+						testObject.getThis = getThis;
+						expect(testObject.getThis()).to.be.equal(testObject);
+					});
+					it('test apply', function() {
+						var testObject = {};
+						expect(getThis.apply(testObject)).to.be.equal(testObject);
+					});
+					it('test call', function() {
+						var testObject = {};
+						expect(getThis.call(testObject)).to.be.equal(testObject);
+					});
+					it('test bind', function() {
+						var testObject = {};
+						var testFunction = getThis.bind(testObject);
+						expect(testFunction()).to.be.equal(testObject);
+					});
+
+				});
+				describe('another singleton test', function() {
+					it('test create single bike', function() {
+						var createSingleBike = (function() {
+							var instance;
+
+							function BikeMaker() {
+								this.value = '200rmb';
+								this.name = 'bike';
+								this.speed = '20kph';
+							}
+							return function() {
+								return instance || (instance = new BikeMaker());
+							}
+						})();
+						var firstBike = createSingleBike();
+						var secondBike = createSingleBike();
+						expect(firstBike).to.be.equal(secondBike);
+					});
+					it('test proxysingleton', function() {
+						function BikeMaker() {
+							var _bike = {};
+							_bike.value = '200rmb';
+							_bike.name = 'bike';
+							_bike.speed = '20kph';
+							return _bike;
+						}
+						//proxy
+						function getSingle(fn) {
+							var instance;
+							return function() {
+								return instance || (instance = fn.apply(this, arguments));
+							}
+						}
+						getSingleBike = getSingle(BikeMaker);
+						var firstBike = getSingleBike();
+						var secondBike = getSingleBike();
+					});
+				});
+				describe('strategy pattern test', function() {
+					it('caculator test', function() {
+						var performanceLevel = {
+							levelS: function(salary) {
+								return salary * 4;
+							},
+							levelA: function(salary) {
+								return salary * 3
+							}
+						};
+						performanceLevel.addMethod = function(levelName, times) {
+							this[levelName] = function(salary) {
+								return salary * times;
+							};
+						};
+						caculator = function(levelName, salary) {
+							return performanceLevel[levelName](salary);
+						};
+						expect(caculator('levelS', 400)).to.be.equal(1600);
+						performanceLevel.addMethod('levelB', 2);
+						expect(caculator('levelB', 200)).to.be.equal(400);
+					});
+					var checker = (function(maxSpeed, maxWidth) {
+						checkParam = {
+							maxSpeed: maxSpeed,
+							maxWidth: maxWidth
+						};
+						var _checker = {};
+						_checker.maxSpeed = function(speed) {
+							if(speed > checkParam.maxSpeed) {
+								return 'too fast';
+							}
+						};
+						_checker.maxWidth = function(width) {
+							if(width > checkParam.maxWidth) {
+								return 'too wide';
+							}
+						};
+						_checker.modified = function(checkParamKey, value) {
+							checkParam[checkParamKey] = value;
+						};
+						_checker.addMethod = function(checkRegular, checkValue, checkFunction) {
+							checkParam[checkRegular] = checkValue;
+							_checker[checkRegular] = checkFunction;
+						};
+						return _checker
+					})(20, 20);
+					var validator = (function() {
+						var WaitToValidate = [];
+						var _validator = {};
+						_validator.add = function(checkMethod, standard, checkValue) {
+							checker.modified(checkMethod, standard);
+							WaitToValidate.push([checkMethod, checkValue]);
+						};
+						_validator.start = function() {
+							var errorMessage = [];
+							for(var index in WaitToValidate) {
+								if(checker[WaitToValidate[index][0]](WaitToValidate[index][1])) {
+									errorMessage.push(checker[WaitToValidate[index][0]](WaitToValidate[index][1]));
+								};
+							}
+							return errorMessage.toString();
+						};
+						_validator.clear = function() {
+							WaitToValidate = [];
+						};
+						return _validator;
+					})();
+					validator.add('maxSpeed', 10, 30);
+					validator.add('maxWidth', 40, 30);
+					it('test validator', function() {
+						expect(validator.start()).to.be.equal('too fast');
+					});
+				});
+				describe('proxy test', function() {
+					function Proxy(callback) {
+						var cache = [];
+						return function() {
+							var cacheIndex = Array.prototype.join(arguments, ',');
+							if(cacheIndex in cache) {
+								return cache[cacheIndex];
+							} else {
+								return cache[cacheIndex] = callback.apply(this, arguments);
+							}
+						}
+					}
+					it('AddProxy test', function() {
+						function add() {
+							var result = 0;
+							for(var index in arguments) {
+								result += arguments[index];
+							}
+							return result;
+						}
+						var addProxy = Proxy(add);
+						expect(addProxy(5, 6, 7)).to.be.equal(18);
+					});
+					it('plus Proxy test', function() {
+						function plus() {
+							var result = 1;
+							for(var index in arguments) {
+								result *= arguments[index];
+							}
+							return result;
+						}
+						var plusProxy = Proxy(plus);
+						expect(plusProxy(2, 3, 4)).to.be.equal(24);
+					});
+				});
+				describe('Iterator pattern', function() {
+					it('inner iterator', function() {
+						function each(array, callback) {
+							for(var index in array) {
+								callback.call(array, index, array[index]);
+							}
+						}
+						var number = 0;
+						each([1, 2, 3], function(index, value) {
+							number += value;
+						});
+						expect(number).to.be.equal(6);
+					});
+					it('outer interator', function() {
+						function Iterator(object) {
+							var current = 0;
+							var next = function() {
+								current += 1;
+							};
+							var isDone = function() {
+								return current >= object.length;
+							};
+							var getCurrent = function() {
+								return object[current];
+							}
+							return {
+								next: next,
+								isDone: isDone,
+								getCurrent: getCurrent
+							};
+						};
+						var firstIterator = Iterator([1, 2, 3]);
+						var number = 0;
+
+						function Addnumber(iterator) {
+							while(!iterator.isDone()) {
+								number += iterator.getCurrent();
+								iterator.next();
+							}
+						}
+						Addnumber(firstIterator);
+						expect(number).to.be.equal(6);
+					});
+				});
+				describe('test publish/subscribe pattern', function() {
+					var event = (function() {
+						var subscribers = {};
+						var listen = function(key, callback) {
+							if(!subscribers[key]) {
+								subscribers[key] = [];
+							}
+							subscribers[key].push(callback);
+						};
+						var publish = function() {
+							var key = Array.prototype.shift.call(arguments);
+							var message = arguments;
+							if(!subscribers[key]) {
+								return false;
+							}
+							for(var index in subscribers[key]) {
+								subscribers[key][index].apply(this, message);
+							}
+						};
+						var remove = function(key, callback) {
+							var subscribersList = subscribers[key];
+							if(!subscribersList) {
+								return false;
+							}
+							if(!callback) {
+								subscribersList && (subscribersList.length = 0);
+							} else {
+								for(var length = subscribersList.length - 1; length >= 0; length--) {
+									var current = subscribersList[length];
+									if(current === callback) {
+										subscribersList.splice(length, 1);
+									}
+								}
+							}
+						};
+						return {
+							listen: listen,
+							publish: publish,
+							remove: remove
+						}
+					})();
+					it('write a event publisher and subscriber', function() {
+						function xiaomingWantToKnow(data) {
+							xiaomingKnow = data;
+						}
+
+						function xiaohongWantToKnow(data) {
+							xiaohongKnow = data;
+						}
+						var xiaomingKnow = 'nothing';
+						var xiaohongKnow = 'nothing';
+						event.listen('xiaoming', xiaomingWantToKnow);
+						event.listen('xiaohong', xiaohongWantToKnow);
+						event.remove('xiaoming', xiaomingWantToKnow);
+						event.publish('xiaoming', 'a');
+						event.publish('xiaohong', 'a1');
+						expect(xiaomingKnow).to.be.equal('nothing');
+						expect(xiaohongKnow).to.be.equal('a1');
+					});
+				});
+				describe('commander patter test', function() {
+					it('marco commander test', function() {
+						marcoCommand = (function() {
+							return {
+								commandList: [],
+								addCommand: function(subCommand) {
+									this.commandList.push(subCommand);
+								},
+								excute: function() {
+									for(var index in this.commandList) {
+										this.commandList[index].excute();
+									}
+								}
+
+							}
+						})()
+						whatYouDone = [];
+						openDoor = {
+							excute: function() {
+								whatYouDone.push('open door');
+							}
+						};
+						closeDoor = {
+							excute: function() {
+								whatYouDone.push('close door');
+							}
+						};
+						marcoCommand.addCommand(openDoor);
+						marcoCommand.addCommand(closeDoor);
+						marcoCommand.excute();
+						expect(whatYouDone.toString()).to.be.equal('open door,close door');
+					});
+				});
+				describe('composite pattern test', function() { //相同的接口树行为和叶行为连接起来
+					it('show folder structure', function() {
+						function Folder(name) {
+							this.name = name;
+							this.parent = null;
+							this.files = [];
+						}
+						Folder.prototype.add = function(file) {
+							this.files.push(file);
+							file.parent = this;
+						};
+						Folder.prototype.remove = function() {
+							if(!this.parent) {
+								return;
+							} else {
+								for(var index = 0, length = this.parent.files.length; index < length; index++) {
+									if(this.parent.files[index] == this) {
+										this.parent.files.splice(1, 1);
+										//this.parent = null
+									}
+								}
+							}
+						};
+						Folder.prototype.scan = function() {
+							folderStructure.push(this.name);
+							for(var index in this.files) {
+								this.files[index].scan(); //连接叶类的scan接口
+							}
+						};
+
+						function File(name) {
+							this.name = name;
+							this.parent = null;
+						}
+						File.prototype.add = function() {
+							throw Error('files can not add files');
+						};
+						File.prototype.scan = function() {
+							folderStructure.push(this.name);
+						};
+						File.prototype.remove = function() {
+							if(!this.parent) {
+								return;
+							}
+							for(var index = 0, length = this.parent.files.length; index < length; index++) {
+								if(this.parent.files[index] == this) {
+									this.parent.files.splice(1, 1);
+								}
+							}
+						}
+						var folderStructure = [];
+						root = new Folder('root folder');
+						firstFolder = new Folder('first folder');
+						root.add(firstFolder);
+						firstFile = new File('first file');
+						secondFile = new File('second file');
+						firstFolder.add(firstFile);
+						firstFolder.add(secondFile);
+						secondFile.remove();
+						root.scan();
+						expect(folderStructure.toString()).to.be.equal('root folder,first folder,first file');
+					});
+				});
+				describe('template pattern test', function() {
+					it('see how u play football', function() {
+						function Sporting() {}
+						Sporting.prototype.dress = function() {
+							throw Error('你的口味很重，不穿衣服就上街。');
+						}
+						Sporting.prototype.takeTheBall = function() {
+							throw Error("球都不带，你真的是来打球的吗？");
+						}
+						Sporting.prototype.play = function() {
+							throw Error('一切都准备好了，你却不上场，难道是你传说中的饮水机管理员？');
+						}
+						Sporting.prototype.initialize = function() { //set action template
+							this.dress();
+							this.takeTheBall();
+							this.play();
+						}
+						howToPlayFootBall = [];
+
+						function PlayFootball() {}
+						PlayFootball.prototype = Object.create(Sporting.prototype);
+						//override methods inherit from parent
+						PlayFootball.prototype.dress = function() {
+							howToPlayFootBall.push('穿上球衣和ball boot。');
+						}
+						PlayFootball.prototype.takeTheBall = function() {
+							howToPlayFootBall.push('带上足球。');
+						}
+						PlayFootball.prototype.play = function() {
+							howToPlayFootBall.push('开始你的表演！')
+						}
+						playFootball = new PlayFootball();
+						playFootball.initialize(); // call template
+						expect(howToPlayFootBall.toString()).to.be.equal('穿上球衣和ball boot。,带上足球。,开始你的表演！');
+					});
+				});
+				describe('flyweight pattern tets', function() {
+					var whoIsMade = [];
+					//元对象创建器具
+					function MakePerson(sex) {
+						this.sex = sex; //内部属性
+						this.say = function(id) {
+							//从外部状态管理器拉取需要的属性,组成一个完整的对象
+							outsideStatusFactory.setExternalState(this, id);
+							//内部行为
+							var string = "I'm a " + this.sex + "," + "I'm no." + this.id + ", I like " + this.hobby + ".";
+							whoIsMade.push(string);
+						}
+					}
+					//元工厂管理器
+					var flyFactory = (function() {
+						var personBox = []; //保存元对象，需要的收可以直接调用元。
+						return {
+							create: function(sex) {
+								if(personBox[sex]) {
+									return personBox[sex]; //确保元不重复
+								} else {
+									return personBox[sex] = new MakePerson(sex); //创建元，并将元放入存储器
+								}
+							}
+						};
+					})();
+					//
+					outsideStatusFactory = (function() {
+						var outsideStatus = {};
+						return {
+							add: function(id, sex, hobby) {
+								outsideStatus[id] = { id: id, hobby: hobby }; //讲外部属性储存到外部属性存储器
+								var person = flyFactory.create(sex); //拉取元以备使用
+								person.say(id);
+							},
+							setExternalState: function(flyWeight, id) { //从外部属性拉取目标数据放入享元对象
+								var targetStatus = outsideStatus[id];
+								for(var key in targetStatus) {
+									flyWeight[key] = targetStatus[key];
+								}
+
+							}
+						};
+					})();
+					var someMan = {
+						sex: 'man',
+						character: [{
+							id: 1,
+							hobby: 'football'
+						}, {
+							id: 2,
+							hobby: 'basketball'
+						}]
+					};
+
+					function makeMan(list) {
+						var length = list.character.length;
+						for(var index = 0; index < length; index++) {
+							outsideStatusFactory.add(list.character[index]['id'], list.sex, list.character[index]['hobby']);
+						}
+					}
+					makeMan(someMan);
+					it('make some people', function() {
+						expect(whoIsMade.toString()).to.be.equal('I\'m a man,I\'m no.1, I like football.,I\'m a man,I\'m no.2, I like basketball.');
+					});
+				});
+				describe('职责链测试', function() {
+					it('test chain', function() {
+						function Chain(callback) {
+							this.callback = callback;
+							this.nextSuccesor = null;
+						}
+						Chain.prototype.setNextSuccesor = function(nextSuccesor) {
+							return this.nextSuccesor = nextSuccesor;
+						}
+						Chain.prototype.excute = function() {
+							var result = this.callback.apply(this, arguments);
+							if(result === 'next') {
+								return this.nextSuccesor.excute.apply(this.nextSuccesor, arguments);
+							}
+							return result;
+						}
+
+						function isRed(color) {
+							if(color === 'red') {
+								return color;
+							}
+							return 'next';
+						}
+
+						function isBlue(color) {
+							if(color === 'blue') {
+								return color;
+							}
+							return 'next';
+						}
+
+						function isYellow(color) {
+							return color;
+						}
+						var isRedChain = new Chain(isRed);
+						var isBlueChain = new Chain(isBlue);
+						var isYellowChain = new Chain(isYellow);
+						isRedChain.setNextSuccesor(isBlueChain);
+						isBlueChain.setNextSuccesor(isYellowChain);
+						//console.log(isBlueChain.nextSuccesor);
+						whatIsTheColor = isRedChain.excute('yellow');
+						expect(whatIsTheColor).to.be.equal('yellow');
+					});
+					it('test aop', function() {
+						Function.prototype.before = function(callback) {
+							var self = this; //应用自己以便后面的执行。
+							return function() {
+								callback.apply(this, arguments);
+								return self.apply(this, arguments);
+							}
+						};
+						Function.prototype.after = function(callback) {
+							var self = this; //应用自己以便后面的执行
+							return function() {
+								var result = self.apply(this, arguments);
+								if(result === 'next') { //增加判断条件，决定是否调用后面的函数。
+									return callback.apply(this, arguments);
+								}
+								return result;
+							};
+						};
+
+						function isRed(color) {
+							if(color === 'red') {
+								return color;
+							}
+							return 'next';
+						}
+
+						function isBlue(color) {
+							if(color === 'blue') {
+								return color;
+							}
+							return 'next';
+						}
+
+						function isYellow(color) {
+							return color;
+						}
+						whatColor = isRed.after(isBlue).after(isYellow);
+						expect(whatColor('yellow')).to.be.equal('yellow');
+					});
+				});
+				describe('midator pattern test', function() {
+					it('see who getPoint,who lost Points', function() {
+						function Player(name) { //Player构造器
+							this.name = name;
+						}
+						Player.prototype.getPoints = function() {
+							playerManager.recieveMessage('getPoints', this); //向接口发送消息，通过接口执行想要的动作。
+						};
+						Player.prototype.join = function(team) {
+							playerManager.recieveMessage('join', this, team); //向接口发送消息，通过接口执行想要的动作。
+						}
+						Player.prototype.changeTeam = function(team) {
+							playerManager.recieveMessage('changeTeam', this, team); //向接口发送消息，通过接口执行想要的动作。
+						};
+						Player.prototype.remove = function() {
+							playerManager.recieveMessage('remove', this); //向接口发送消息，通过接口执行想要的动作。
+						};
+						playerManager = (function() { //管理对象，封装动作，提供接口接收对象发送的信息从而执行动作
+							var playTeams = []; //保持对其他各个对象的引用和管理
+							var operation = {};
+							//引用需要操作的对象，封装操作
+							operation.join = function(player, team) {
+								if(!playTeams[team]) {
+									playTeams[team] = [];
+								}
+								player.team = team;
+								playTeams[team].push(player);
+							};
+
+							operation.remove = function(player) {
+								var currentTeam = player.team;
+								for(var index in playTeams[currentTeam]) {
+									if(playTeams[currentTeam][index] === player) {
+										playTeams[currentTeam].splice(index, 1);
+									}
+								}
+							};
+
+							operation.changeTeam = function(player, newTeam) {
+								operation.remove(player);
+								operation.join(player, newTeam);
+							};
+							operation.getPoints = function(player) {
+								getPointsTeam = player.team;
+								for(var index in playTeams) {
+									if(index === getPointsTeam) {
+										for(var playerIndex in playTeams[index]) {
+											result.push(playTeams[index][playerIndex].name + ' :getPoints');
+										}
+									} else {
+										for(var playerIndex in playTeams[index]) {
+											result.push(playTeams[index][playerIndex].name + ' :lostPoints');
+										}
+									}
+								}
+							};
+							//返回接口，接收对象的信息。
+							return {
+								recieveMessage: function() {
+									var meassage = Array.prototype.shift.call(arguments);
+									operation[meassage].apply(this, arguments);
+								}
+							}
+
+						})();
+						var xiaoming = new Player('xiaoming');
+						var xiaohong = new Player('xiaohong');
+						var xiaoguang = new Player('xiaoguang');
+						var result = [];
+						xiaoming.join('A');
+						xiaohong.join('B');
+						xiaoguang.join('A');
+						xiaoguang.changeTeam('B');
+						xiaoguang.remove();
+						xiaoming.getPoints();
+						expect(result.toString()).to.be.equal('xiaoming :getPoints,xiaohong :lostPoints');
+					});
+				});
+				describe('decorator pattern test', function() {
+					it('decorate function through aop', function() {
+						Function.prototype.after = function(afterFunction) {
+							var self = this;
+							return function() {
+								self.apply(this, arguments);
+								var result = afterFunction.apply(this, arguments);
+								return result;
+							}
+						};
+
+						function addOne(param) {
+							return param.value += 1;
+						}
+
+						function addTwo(param) {
+							return param.value += 2;
+						}
+						addThree = addOne.after(addTwo);
+						expect(addThree({ value: 0 })).to.be.equal(3);
+					});
+				});
+				describe('status pattern', function() {
+					it('turn on the light and turn off the light', function() {
+						function StatusOn(light) {
+							this.light = light;
+							this.change = function() {
+								currentStatus = 'change to off';
+								//设置状态
+								this.light.currentStatus = this.light.off;
+							}
+						}
+
+						function StatusOff(light) {
+							this.light = light;
+							this.change = function() {
+								currentStatus = 'change to on';
+								//设置状态
+								this.light.currentStatus = this.light.on;
+							}
+						}
+
+						function Light() {
+							this.on = new StatusOn(this);
+							this.off = new StatusOff(this);
+							this.currentStatus = this.off;
+						}
+						var light = new Light();
+
+						function changeStatus() {
+							light.currentStatus.change();
+						}
+						var currentStatus;
+						changeStatus();
+						changeStatus();
+						changeStatus();
+						expect(currentStatus).to.be.equal('change to on');
+					});
+				});
+				describe('adaptor apttern',function(){
+					it('map translate',function(){
+						var googleMap = {
+							show:function(){
+								mapShow = 'goole map';
+							}
+						};
+						var baiduMap = {
+							display:function(){
+								mapShow = 'baidu map';
+							}
+						};
+						var baiduAdaptor = {
+							show:function(){
+								baiduMap.display();
+							}
+						};
+						renderMap = function(map){
+							map.show();
+						};
+						var mapShow;
+						renderMap(baiduAdaptor);
+						expect(mapShow).to.be.equal('baidu map');
+					});
+				});
+				mocha.run(); //运行mocha进行测试
+			});
+		</script>
+	</body>
+
+</html>
