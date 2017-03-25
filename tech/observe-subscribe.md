@@ -45,7 +45,6 @@
 			}
 			sub.add('fangjia',first);
 			sub.add('fangjia',second);
-			sub.remove('fangjia');
 			sub.publish('fangjia','1000');//控制台输出两次1000
 			
 ```
