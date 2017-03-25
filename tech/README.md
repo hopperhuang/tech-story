@@ -38,3 +38,4 @@
 1. [设计模式的原则]
 2. [单例模式](./singleton.md)
 3. [工厂模式](./factory.md)
+4. [装饰者模式](./decorator.md)
