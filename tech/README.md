@@ -41,3 +41,4 @@
 4. [装饰者模式](./decorator.md)
 5. [观察/订阅模式](./observe-subscribe.md)
 6. [代理模式](./proxy.md)
+7. [策略模式](./strategy.md)
