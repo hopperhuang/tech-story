@@ -42,4 +42,4 @@
 5. [观察/订阅模式](./observe-subscribe.md)
 6. [代理模式](./proxy.md)
 7. [策略模式](./strategy.md)
-8. [迭代器模式](./iterartor.md)
+8. [迭代器模式](./iterator.md)
