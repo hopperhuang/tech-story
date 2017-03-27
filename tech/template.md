@@ -20,7 +20,9 @@
 				this.start();
 			};
 			function PlayFootball(){}
+			//继承父接口			
 			PlayFootball.prototype = Object.create(Play.prototype);
+			//改写继承的结构			
 			PlayFootball.prototype.dress = function(){
 				console.log("穿上球衣");
 			};
@@ -31,7 +33,8 @@
 				console.log('绿茵场上，请开始你的表演。');
 			};
 			var playfootball = new PlayFootball();
-			playfootball.play();
+			//通过接口统一调用
+                        playfootball.play();
 			//控制台依次输出：床上球衣，带上足球和球鞋，绿茵场上，请开始你的表演。
 ```
 
