@@ -45,3 +45,4 @@
 8. [迭代器模式](./iterator.md)
 9. [命令模式](./command.md)
 10. [组合模式](./composite.md)
+11. [模板方法](./template.md)
