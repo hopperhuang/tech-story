@@ -46,3 +46,4 @@
 9. [命令模式](./command.md)
 10. [组合模式](./composite.md)
 11. [模板方法](./template.md)
+12. [享元模式](./flyweight.md)
