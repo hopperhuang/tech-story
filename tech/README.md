@@ -48,3 +48,4 @@
 11. [模板方法](./template.md)
 12. [享元模式](./flyweight.md)
 13. [中介者模式](./mediator.md)
+14. [职责链模式](./responsibilityChain.md)
