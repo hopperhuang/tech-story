@@ -51,5 +51,5 @@
 14. [职责链模式](./responsibilityChain.md)
 15. [状态模式](./status.md)
 
-## 前端工程话
+## 前端工程化
 1. [单元测试](./unittest.md)
