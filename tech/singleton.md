@@ -64,24 +64,27 @@ MakeBike = (function(){
 看下面的代码：
 
 ```
-			function Bike(){//构造函数
-				this.name = 'bike';
-			}
-			function Proxy(constructor){//在代理函数里面引入需要的构造函数
-				var instance ;
-				return function(){//生成一个用于生成单例的函数
-					if(instance){
-						return instance;
-					}	else {
-						return instance = new constructor();//引用构造函数生成对象
-					}
-				};
-			}
-			BikeProxy = Proxy(Bike);//生成一个单例代理构造器。
-			firstBike = BikeProxy();
-			secondBike = BikeProxy();
-			console.log(firstBike === secondBike);//true
-			
+var Proxy = function(constructor){
+  var instance = null ;
+  return function(){
+    if (instance) {
+      return instance;
+    } else {
+      constructor.apply(this,arguments);
+      return instance = this;
+    }
+  };
+};
+function Bike(name,color) {
+  this.name = name;
+  this.color = color
+}
+var ProxyBike = Proxy(Bike);
+var firstBike =  new ProxyBike('xiaoming','red');
+var secondBike = new ProxyBike('xiaohong','blue');
+console.log(firstBike);
+console.log(secondBike);
+console.log(firstBike === secondBike);//ture			
 ```
 同样，我们构造了一个单例。
 我们让创建单例和管理单例的代码分离开来，通过管理器对构造器的引用对函数进行了聚合，这样的方式既清爽，又好维护。这样，我们既可以创建单例，也可以创建多个实例，不用特别写一个构造函数，想写其他单例函数时，通过代理也可以生成。
