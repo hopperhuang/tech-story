@@ -77,7 +77,24 @@ git push [remote resposity name] [local branch name]:[remote branch name]
 ```
 
 
+
+
+
+
+
 留白一下，以便日后有什么增加。
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 一般来说克隆一个仓库，我们会直接用git clone 命令，然后直接在仓库里面进行操作。
@@ -99,6 +116,9 @@ git merge --allow-unrelated-histories [remote branch name]
 ```
 
 这样，我们就可以将两个base不同的分支合并。
+
+
+
 
 还有一点就是，我们要将文件强行推送到远程仓库里面。文件推送到远程仓库前，远程仓库会检查远程仓库是否推送的分支的ancestor，如果不是，则reject推送。
 
