@@ -77,7 +77,7 @@ git push [remote resposity name] [local branch name]:[remote branch name]
 ```
 
 
-
+---
 
 
 
@@ -88,14 +88,15 @@ git push [remote resposity name] [local branch name]:[remote branch name]
 
 
 
+可能会写一下怎么对远程仓库的多个分支进行处理，或者怎么commit别人的提交。
+这几点先记下来。
 
 
 
 
 
 
-
-
+---
 
 一般来说克隆一个仓库，我们会直接用git clone 命令，然后直接在仓库里面进行操作。
 
