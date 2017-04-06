@@ -78,7 +78,11 @@ git push [remote resposity name] [local branch name]:[remote branch name]
 
 
 ---
-
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 
@@ -92,6 +96,11 @@ git push [remote resposity name] [local branch name]:[remote branch name]
 这几点先记下来。
 
 
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 
